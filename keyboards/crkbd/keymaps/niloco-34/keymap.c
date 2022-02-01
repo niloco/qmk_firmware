@@ -26,13 +26,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 // #defines for readability (lmao)
 #define DFQ DF(DEF_Q)
 #define DFC DF(DEF_C)
-#define DFG DF(DEF_G)
-#define TGS TG(STENO)
-#define LA_SYM MO(SYM)
-#define LA_NAV MO(NAV)
+#define LT_SYM_BSPC LT(SYM, KC_BSPC)
+#define LA_NUM MO(NUM)
 
 // layers
-enum layers { DEF_Q, DEF_C, SYM, NAV, NUM };
+enum layers { DEF_Q, DEF_C, SYM, NUM, NAV };
 
 // one shot mods
 enum keycodes {
@@ -50,7 +48,11 @@ enum combos {
     L_R_UPPER_GUI,
     L_M_UPPER_ALT,
     L_I_UPPER_CTRL,    
+    L_I_LOWER_TAB,
+    L_I_INNER_ESC,
 
+    R_I_INNER_ESC,
+    R_I_LOWER_ENTER,
     R_I_UPPER_CTRL,
     R_M_UPPER_ALT,
     R_R_UPPER_GUI,
@@ -71,6 +73,10 @@ const uint16_t PROGMEM l_r_upper_gui[] = {KC_W, KC_S, COMBO_END};
 const uint16_t PROGMEM l_m_upper_alt[] = {KC_E, KC_D, COMBO_END};
 const uint16_t PROGMEM l_i_upper_ctrl[] = {KC_R, KC_F, COMBO_END};
 
+//////// other
+const uint16_t PROGMEM l_i_lower_tab[] = {KC_F, KC_V, COMBO_END};
+const uint16_t PROGMEM l_i_inner_esc[] = {KC_F, KC_G, COMBO_END};
+
 ////// right hand
 
 //////// mods
@@ -78,11 +84,19 @@ const uint16_t PROGMEM r_i_upper_ctrl[] = {KC_U, KC_J, COMBO_END};
 const uint16_t PROGMEM r_m_upper_alt[] = {KC_I, KC_K, COMBO_END};
 const uint16_t PROGMEM r_r_upper_gui[] = {KC_O, KC_L, COMBO_END};
 
+//////// other
+const uint16_t PROGMEM r_i_inner_esc[] = {KC_H, KC_J, COMBO_END};
+const uint16_t PROGMEM r_i_lower_enter[] = {KC_J, KC_M, COMBO_END};
+
 // combo mapping
 combo_t key_combos[] = {
     [L_R_UPPER_GUI] = COMBO(l_r_upper_gui, OS_GUI),
     [L_M_UPPER_ALT] = COMBO(l_m_upper_alt, OS_ALT),
     [L_I_UPPER_CTRL] = COMBO(l_i_upper_ctrl, OS_CTRL),
+    [L_I_LOWER_TAB] = COMBO(l_i_lower_tab, KC_TAB),
+    [L_I_INNER_ESC] = COMBO(l_i_inner_esc, KC_ESC),
+    [R_I_INNER_ESC] = COMBO(r_i_inner_esc, KC_ESC),
+    [R_I_LOWER_ENTER] = COMBO(r_i_lower_enter, KC_ENT),
     [R_I_UPPER_CTRL] = COMBO(r_i_upper_ctrl, OS_CTRL),
     [R_M_UPPER_ALT] = COMBO(r_m_upper_alt, OS_ALT),
     [R_R_UPPER_GUI] = COMBO(r_r_upper_gui, OS_GUI),
@@ -99,7 +113,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX,  KC_Z,   KC_X,    KC_C,    KC_V,    KC_B,                         KC_N,    KC_M,   KC_COMM, KC_DOT,  KC_SLSH, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, OS_SHFT, LA_NAV,     LA_SYM, KC_SPC,  XXXXXXX
+                                          XXXXXXX, OS_SHFT, LA_NUM,   LT_SYM_BSPC, KC_SPC, XXXXXXX
                                       //`--------------------------'  `--------------------------'
  ),
 
@@ -112,31 +126,18 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
       XXXXXXX,  KC_Z,   KC_X,    KC_C,    KC_D,    KC_V,                         KC_K,    KC_H,   KC_COMM, KC_DOT,  KC_SLSH, XXXXXXX,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          XXXXXXX, OS_SHFT, LA_NAV,     LA_SYM, KC_SPC,  XXXXXXX
+                                          XXXXXXX, OS_SHFT, LA_NUM,   LT_SYM_BSPC, KC_SPC, XXXXXXX
                                       //`--------------------------'  `--------------------------'
   ),
 
   // Symbols
   [SYM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______, KC_PERC, KC_LBRC, KC_LCBR, KC_LPRN, KC_TILD,                     KC_CIRC, KC_RPRN, KC_RCBR, KC_RBRC, KC_GRV, _______,
+      _______, KC_GRV, KC_LPRN, KC_RPRN, KC_DLR,   XXXXXXX,                     XXXXXXX, KC_AMPR, KC_ASTR, KC_PIPE, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_MINS, KC_ASTR, KC_EQL,  KC_UNDS, KC_DLR,                      KC_HASH, OS_SHFT,  OS_CTRL, OS_ALT,  OS_GUI, _______,
+      _______, KC_TILD, KC_LCBR, KC_RCBR, KC_EXLM, XXXXXXX,                     XXXXXXX, KC_UNDS, XXXXXXX, KC_COLN, KC_SCLN, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, KC_PLUS, KC_PIPE, KC_AT,   KC_TAB, KC_BSLS,                     XXXXXXX, KC_AMPR, KC_SCLN, KC_COLN, KC_EXLM, _______,
-  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
-                                          _______, _______, _______,    _______, _______, _______
-                                      //`--------------------------'  `--------------------------'
-  ),
-
-  // Nav and switch default layer
-  [NAV] = LAYOUT_split_3x6_3(
-  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______,  DFC,   XXXXXXX, XXXXXXX,  DFQ,    KC_VOLU,                      RESET,   KC_CAPS,  KC_UP,  XXXXXXX, XXXXXXX, _______,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT,  KC_VOLD,                     KC_BSPC, KC_LEFT, KC_DOWN,  KC_RGHT, KC_DEL,  _______,
-  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, CL_SWAP, CL_NORM, XXXXXXX, KC_ESC, KC_MPLY,                      XXXXXXX, KC_PGDN, KC_PGUP, XXXXXXX, KC_ENT,  _______,
+      _______, XXXXXXX, KC_LBRC, KC_RBRC, KC_AT, XXXXXXX,                       XXXXXXX, KC_BSLS, XXXXXXX, XXXXXXX, XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
@@ -145,21 +146,34 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // Numbers and f-keys
   [NUM] = LAYOUT_split_3x6_3(
   //,-----------------------------------------------------.                    ,-----------------------------------------------------.
-      _______,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,                         KC_6,    KC_7,    KC_8,    KC_9,   KC_0, _______,
+      _______, XXXXXXX, KC_HASH, KC_PERC, KC_CIRC, XXXXXXX,                     XXXXXXX,  KC_7,    KC_8,    KC_9,   XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______, OS_GUI, OS_ALT,  OS_CTRL, OS_SHFT,  KC_F11,                      KC_F12,  OS_SHFT, OS_CTRL, OS_ALT,  OS_GUI,   _______,
+      _______, KC_PSLS, KC_PMNS, KC_PPLS, KC_PEQL, XXXXXXX,                     XXXXXXX,  KC_4,    KC_5,    KC_6,   KC_0,    _______,
   //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
-      _______,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,                       KC_F6,   KC_F7,   KC_F8,   KC_F9,   KC_F10,   _______,
+      _______, XXXXXXX, XXXXXXX, XXXXXXX, KC_PAST, XXXXXXX,                     XXXXXXX,  KC_1,    KC_2,    KC_3,   XXXXXXX, _______,
   //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
                                           _______, _______, _______,    _______, _______, _______
                                       //`--------------------------'  `--------------------------'
-  )
+  ),
+
+  // Nav and switch default layer
+  [NAV] = LAYOUT_split_3x6_3(
+  //,-----------------------------------------------------.                    ,-----------------------------------------------------.
+      _______,  DFC,   XXXXXXX,  KC_PGUP,  DFQ,    KC_VOLU,                      RESET,  KC_CAPS,  KC_UP,  XXXXXXX, XXXXXXX, _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, KC_END,  KC_INS,  KC_PGDN, KC_HOME, KC_VOLD,                     XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_DEL,  _______,
+  //|--------+--------+--------+--------+--------+--------|                    |--------+--------+--------+--------+--------+--------|
+      _______, CL_SWAP, CL_NORM, XXXXXXX, KC_PSCR, XXXXXXX,                     XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, _______,
+  //|--------+--------+--------+--------+--------+--------+--------|  |--------+--------+--------+--------+--------+--------+--------|
+                                          _______, _______, _______,    _______, _______, _______
+                                      //`--------------------------'  `--------------------------'
+  ),
 };
 
 bool is_oneshot_cancel_key(uint16_t keycode) {
     switch (keycode) {
-    case LA_SYM:
-    case LA_NAV:
+    case LT_SYM_BSPC:
+    case LA_NUM:
         return true;
     default:
         return false;
@@ -168,8 +182,8 @@ bool is_oneshot_cancel_key(uint16_t keycode) {
 
 bool is_oneshot_ignored_key(uint16_t keycode) {
     switch (keycode) {
-    case LA_SYM:
-    case LA_NAV:
+    case LT_SYM_BSPC:
+    case LA_NUM:
     case KC_LSFT:
     case OS_SHFT:
     case OS_CTRL:
@@ -187,7 +201,7 @@ oneshot_state os_alt_state = os_up_unqueued;
 oneshot_state os_gui_state = os_up_unqueued;
 
 layer_state_t layer_state_set_user(layer_state_t state) {
-    return update_tri_layer_state(state, SYM, NAV, NUM);
+    return update_tri_layer_state(state, SYM, NUM, NAV);
 }
 
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
